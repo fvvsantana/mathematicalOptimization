@@ -1,27 +1,36 @@
+import math
 import pulp
 
 
-# Create a list of coordinates from file
+# Create a list of coordinates from file. Each element will be a tuple (x,y)
 def readFile(inputFile):
     # This will be a list of tuples with the coordinates
     coordList = []
     # Read file and create a node list
     with open(inputFile) as inputFile:
+        # Reach start of node list
         for line in inputFile:
             if line == 'NODE_COORD_SECTION\n':
                 break
+        # Append coordinates to coordList
         for line in inputFile:
             if line == 'EOF\n':
                 break
             line = line.split()[1:]
             coordList.append((float(line[0]), float(line[1])))
-
     return coordList
 
+# Generate a matrix of costs based on the coordinates array
 def costMatrix(coordinates, size):
-    costs = []
+    # Create a matrix of size rows and size columns
+    costs = [ [0]*size ]*size
     for i in range(size):
-        pass
+        for j in range(size):
+            # Calculate Euclidean distance
+            if i != j:
+                costs[i][j] = math.sqrt((coordinates[j][0] - coordinates[i][0])**2 + (coordinates[j][1] - coordinates[i][1])**2)
+    return costs
+
 
 
 def main():
@@ -32,10 +41,10 @@ def main():
 
     # Number of nodes
     nNodes = len(coordinates)
-    #print(coordinates)
 
-    # Calculate matrix
-    costs = []
+    # Calculate matrix of costs
+    costs = costMatrix(coordinates, nNodes)
+    print(costs)
 
 
 if __name__ == '__main__':
