@@ -31,20 +31,35 @@ def costMatrix(coordinates, size):
                 costs[i][j] = math.sqrt((coordinates[j][0] - coordinates[i][0])**2 + (coordinates[j][1] - coordinates[i][1])**2)
     return costs
 
+# Create a matrix of size**2 binary variables
+def createVariables(size):
+    # Create a matrix of size rows and size columns
+    xMatrix = [ [None for i in range(size)] for j in range(size)]
+    for i in range(size):
+        for j in range(size):
+            if i != j:
+                xMatrix[i][j] = pulp.LpVariable('x_{}_{}'.format(i, j), cat='Binary')
+    return xMatrix
+
 
 
 def main():
     # Get list of coordinates from file
     inputFile = 'data/burma14.tsp'
     coordinates = readFile(inputFile)
-    print(coordinates)
 
     # Number of nodes
     nNodes = len(coordinates)
 
     # Calculate matrix of costs
     costs = costMatrix(coordinates, nNodes)
-    print(costs)
+
+    # Create the problem
+    tsp = pulp.LpProblem("Travelling Salesman Problem", pulp.LpMinimize)
+
+    xMatrix = createVariables(nNodes)
+    print(xMatrix)
+
 
 
 if __name__ == '__main__':
@@ -57,7 +72,6 @@ if __name__ == '__main__':
 
 
 '''
-
 # Problem
 my_lp_problem = pulp.LpProblem("My LP Problem", pulp.LpMaximize)
 
