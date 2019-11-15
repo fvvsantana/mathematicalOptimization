@@ -53,6 +53,22 @@ def createVariables(nNodes):
 def addObjectiveFunction(problem, costs, xMatrix, nNodes):
     problem += (pulp.lpSum([ costs[i][j] * xMatrix[i][j] for i in range(nNodes) for j in range(nNodes) if i != j ]))
 
+# Add all constraints
+def addConstraints(problem, xMatrix, uList, nNodes):
+    # The sum of the elements of a row in xMatrix should be 1
+    for i in range(nNodes):
+        problem += pulp.lpSum([ xMatrix[i][j] for j in range(nNodes) if i != j ]) == 1
+
+    # The sum of the elements of a column in xMatrix should be 1
+    for j in range(nNodes):
+        problem += pulp.lpSum([ xMatrix[i][j] for i in range(nNodes) if i != j ]) == 1
+
+    # The sum of the elements of a row in xMatrix should be 1
+    for i in range(1, nNodes):
+        for j in range(1, nNodes):
+            if i != j:
+                problem += uList[i] - uList[j] + nNodes * xMatrix[i][j] <= nNodes - 1
+
 
 
 def main():
@@ -71,8 +87,24 @@ def main():
 
     xMatrix, uList = createVariables(nNodes)
     addObjectiveFunction(tsp, costs, xMatrix, nNodes)
+    addConstraints(tsp, xMatrix, uList, nNodes)
     print(tsp)
 
+    '''
+    # Print status
+    print(pulp.LpStatus[my_lp_problem.status])
+    # Solve problem
+    my_lp_problem.solve()
+    # Print status
+    print(pulp.LpStatus[my_lp_problem.status])
+
+    # Print solution
+    for variable in my_lp_problem.variables():
+        print("{} = {}".format(variable.name, variable.varValue))
+
+    # Print value of solution
+    print(pulp.value(my_lp_problem.objective))
+    '''
 
 
 
