@@ -23,7 +23,7 @@ def readFile(inputFile):
 # Generate a matrix of costs based on the coordinates array
 def costMatrix(coordinates, size):
     # Create a matrix of size rows and size columns
-    costs = [ [0]*size ]*size
+    costs = [ [0 for i in range(size)] for j in range(size)]
     for i in range(size):
         for j in range(size):
             # Calculate Euclidean distance
