@@ -41,6 +41,10 @@ def createVariables(size):
                 xMatrix[i][j] = pulp.LpVariable('x_{}_{}'.format(i, j), cat='Binary')
     return xMatrix
 
+# Add objective function
+def addObjectiveFunction(problem, costs, xMatrix, nNodes):
+    problem += (pulp.lpSum([ costs[i][j] * xMatrix[i][j] for i in range(nNodes) for j in range(nNodes) if i != j ]))
+
 
 
 def main():
@@ -58,7 +62,9 @@ def main():
     tsp = pulp.LpProblem("Travelling Salesman Problem", pulp.LpMinimize)
 
     xMatrix = createVariables(nNodes)
-    print(xMatrix)
+    addObjectiveFunction(tsp, costs, xMatrix, nNodes)
+    print(tsp)
+
 
 
 
@@ -69,6 +75,7 @@ if __name__ == '__main__':
 
 
     #print(line, end='')
+
 
 
 '''
