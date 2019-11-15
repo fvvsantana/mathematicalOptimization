@@ -44,7 +44,10 @@ def createVariables(nNodes):
     # Create a list of nNodes integer variables
     uList =  []
     for i in range(nNodes):
-        uList.append(pulp.LpVariable('u_{}'.format(i), lowBound=1, upBound=nNodes-1, cat='Integer'))
+        # Variable from work proposal, it's wrong
+        #uList.append(pulp.LpVariable('u_{}'.format(i), lowBound=1, upBound=nNodes, cat='Integer'))
+        # Variable from slides, it's right
+        uList.append(pulp.LpVariable('u_{}'.format(i), lowBound=0, upBound=nNodes-1, cat='Integer'))
 
     return xMatrix, uList
 
@@ -63,11 +66,21 @@ def addConstraints(problem, xMatrix, uList, nNodes):
     for j in range(nNodes):
         problem += pulp.lpSum([ xMatrix[i][j] for i in range(nNodes) if i != j ]) == 1
 
-    # The sum of the elements of a row in xMatrix should be 1
+    # This is the constraints from the work proposal, it's wrong
+    '''
+    # Constraint from the work proposal
     for i in range(1, nNodes):
         for j in range(1, nNodes):
             if i != j:
                 problem += uList[i] - uList[j] + nNodes * xMatrix[i][j] <= nNodes - 1
+    '''
+    # Constraint from the slides, it's right
+    for i in range(0, nNodes):
+        for j in range(1, nNodes):
+            if i != j:
+                #problem += uList[i] - uList[j] + nNodes * xMatrix[i][j] <= nNodes - 1
+                problem += uList[j] >= uList[i] + xMatrix[i][j] - nNodes * (1 - xMatrix[i][j])
+    problem += uList[0] == 0
 
 
 
@@ -88,71 +101,32 @@ def main():
     xMatrix, uList = createVariables(nNodes)
     addObjectiveFunction(tsp, costs, xMatrix, nNodes)
     addConstraints(tsp, xMatrix, uList, nNodes)
-    print(tsp)
 
-    '''
     # Print status
-    print(pulp.LpStatus[my_lp_problem.status])
+    print(pulp.LpStatus[tsp.status])
     # Solve problem
-    my_lp_problem.solve()
+    tsp.solve()
     # Print status
-    print(pulp.LpStatus[my_lp_problem.status])
+    print(pulp.LpStatus[tsp.status])
 
-    # Print solution
-    for variable in my_lp_problem.variables():
-        print("{} = {}".format(variable.name, variable.varValue))
+
+    # Print answer
+    print('Answer:', [u.varValue for u in uList])
 
     # Print value of solution
-    print(pulp.value(my_lp_problem.objective))
-    '''
+    print('Value:', pulp.value(tsp.objective))
 
+    '''
+    # Print value of xMatrix
+    resultMatrix = [ [None for i in range(nNodes)] for j in range(nNodes)]
+    for i in range(nNodes):
+        for j in range(nNodes):
+            if i != j:
+                resultMatrix[i][j] = xMatrix[i][j].varValue
+    for row in resultMatrix:
+        print(row)
+    '''
 
 
 if __name__ == '__main__':
     main()
-
-
-
-
-    #print(line, end='')
-
-
-
-'''
-# Problem
-my_lp_problem = pulp.LpProblem("My LP Problem", pulp.LpMaximize)
-
-# Creating variables
-x = pulp.LpVariable('x', lowBound=0, cat='Continuous')
-y = pulp.LpVariable('y', lowBound=2, cat='Continuous')
-
-# Objective function
-my_lp_problem += 4 * x + 3 * y, "Z"
-
-# Constraints
-my_lp_problem += 2 * y <= 25 - x
-my_lp_problem += 4 * y >= 2 * x - 8
-my_lp_problem += y <= 2 * x - 5
-# Make the problema infeasible
-#my_lp_problem += y <= 1
-# Make the problema unbounded. You have to comment the other constraints
-#my_lp_problem += x <= 3
-
-# Print problem
-print(my_lp_problem)
-
-# Print status
-print(pulp.LpStatus[my_lp_problem.status])
-# Solve problem
-my_lp_problem.solve()
-# Print status
-print(pulp.LpStatus[my_lp_problem.status])
-
-# Print solution
-for variable in my_lp_problem.variables():
-    print("{} = {}".format(variable.name, variable.varValue))
-
-# Print value of solution
-print(pulp.value(my_lp_problem.objective))
-
-'''
