@@ -21,25 +21,33 @@ def readFile(inputFile):
     return coordList
 
 # Generate a matrix of costs based on the coordinates array
-def costMatrix(coordinates, size):
-    # Create a matrix of size rows and size columns
-    costs = [ [0 for i in range(size)] for j in range(size)]
-    for i in range(size):
-        for j in range(size):
+def costMatrix(coordinates, nNodes):
+    # Create a matrix of nNodes rows and nNodes columns
+    costs = [ [0 for i in range(nNodes)] for j in range(nNodes)]
+    for i in range(nNodes):
+        for j in range(nNodes):
             # Calculate Euclidean distance
             if i != j:
                 costs[i][j] = math.sqrt((coordinates[j][0] - coordinates[i][0])**2 + (coordinates[j][1] - coordinates[i][1])**2)
     return costs
 
-# Create a matrix of size**2 binary variables
-def createVariables(size):
-    # Create a matrix of size rows and size columns
-    xMatrix = [ [None for i in range(size)] for j in range(size)]
-    for i in range(size):
-        for j in range(size):
+# Create a binary and integer variables
+def createVariables(nNodes):
+    # Create a matrix of nNodes rows and nNodes columns
+    xMatrix = [ [None for i in range(nNodes)] for j in range(nNodes)]
+    # Add the binary variables to the matrix
+    for i in range(nNodes):
+        for j in range(nNodes):
             if i != j:
                 xMatrix[i][j] = pulp.LpVariable('x_{}_{}'.format(i, j), cat='Binary')
-    return xMatrix
+
+    # Create a list of nNodes integer variables
+    uList =  []
+    for i in range(nNodes):
+        uList.append(pulp.LpVariable('u_{}'.format(i), lowBound=1, upBound=nNodes-1, cat='Integer'))
+
+    return xMatrix, uList
+
 
 # Add objective function
 def addObjectiveFunction(problem, costs, xMatrix, nNodes):
@@ -61,7 +69,7 @@ def main():
     # Create the problem
     tsp = pulp.LpProblem("Travelling Salesman Problem", pulp.LpMinimize)
 
-    xMatrix = createVariables(nNodes)
+    xMatrix, uList = createVariables(nNodes)
     addObjectiveFunction(tsp, costs, xMatrix, nNodes)
     print(tsp)
 
