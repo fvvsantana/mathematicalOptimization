@@ -1,5 +1,6 @@
 import math
 import pulp
+import time
 
 
 # Create a list of coordinates from file. Each element will be a tuple (x,y)
@@ -40,6 +41,7 @@ def createVariables(nNodes):
         for j in range(nNodes):
             if i != j:
                 xMatrix[i][j] = pulp.LpVariable('x_{}_{}'.format(i, j), cat='Binary')
+                #xMatrix[i][j] = pulp.LpVariable('x_{}_{}'.format(i, j), cat='Continuous', lowBound=0, upBound=1)
 
     # Create a list of nNodes integer variables
     uList =  []
@@ -87,13 +89,26 @@ def addConstraints(problem, xMatrix, uList, nNodes):
 def main():
     # Get list of coordinates from file
     inputFile = 'data/burma14.tsp'
+    #inputFile = 'data/att48.tsp' # acho que deu errado
+    #inputFile = 'data/a280.tsp'
+    #inputFile = 'data/ali535.tsp' #acho que deu errado
+    #inputFile = 'data/attAux.tsp'
+    #inputFile = 'data/berlin52.tsp'
+    #inputFile = 'data/gr431.tsp'
+    #inputFile = 'data/ulysses22.tsp'
+    #inputFile = 'data/ulysses16.tsp'
     coordinates = readFile(inputFile)
+    print('Problem:', inputFile)
 
     # Number of nodes
     nNodes = len(coordinates)
+    print('Number of nodes:', nNodes)
+
 
     # Calculate matrix of costs
     costs = costMatrix(coordinates, nNodes)
+    #print('Costs matrix:')
+    #print(costs)
 
     # Create the problem
     tsp = pulp.LpProblem("Travelling Salesman Problem", pulp.LpMinimize)
@@ -105,7 +120,10 @@ def main():
     # Print status
     print(pulp.LpStatus[tsp.status])
     # Solve problem
+    startTime = time.time()
     tsp.solve()
+    endTime = time.time()
+    elapsedTime = endTime - startTime
     # Print status
     print(pulp.LpStatus[tsp.status])
 
@@ -115,6 +133,7 @@ def main():
 
     # Print value of solution
     print('Value:', pulp.value(tsp.objective))
+    print('Time to solve:', elapsedTime, 'seconds\n')
 
     '''
     # Print value of xMatrix
