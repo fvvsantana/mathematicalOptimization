@@ -6,7 +6,7 @@ This project is an implementation of the [Miller, Tucker and Zemlin (MTZ) model]
 
 The implementation of the model is written in the file [solve.py](/solve.py).
 
-For more information about the model, solving process and results checkout the [report](/relatorioProgmat.pdf)
+For more information about the model, solving process and results checkout the [report](/relatorioProgmat.pdf).
 
 ## Tech stack
 * Python (Pulp)
