@@ -14,7 +14,7 @@ Aí gente, dediquei um tempo aqui pra separar o trabalho, se pá ajuda a gente a
     3.2 - Comparar as soluções dos problemas relaxados com as melhores soluções conhecidas (estão no site).
     3.3 - Resolva os 4 problemas como inteiros e responda às perguntas do primeiro tópico do slide 18.
 
-4 - Incluir referências utilizadas no relatório. (Lembrete pro Flavio: colocar referência ao mateiral auxiliar pq vc tirou de lá a formulação mtz).
+4 - Incluir referências utilizadas no relatório. (Lembrete pra mim mesmo (Flavio): colocar referência ao mateiral auxiliar pq vc tirou de lá a formulação mtz).
 
 5 - Heurística:
     5.1 - Resolver o caixeiro viajante utilizando uma heurística construtiva e uma de melhoria.
