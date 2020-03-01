@@ -1,6 +1,4 @@
-#organizacao
-
-Aí gente, dediquei um tempo aqui pra separar o trabalho, se pá ajuda a gente a começar:
+# Tasks
 
 1 - Implementar caixeiro viajante com modelagem MTZ em python.
 
@@ -20,11 +18,3 @@ Aí gente, dediquei um tempo aqui pra separar o trabalho, se pá ajuda a gente a
     5.1 - Resolver o caixeiro viajante utilizando uma heurística construtiva e uma de melhoria.
     5.2 - Indicar o tempo que demora para rodar a heurística nas 4 instâncias usadas no item 3.1. Comparar com o tempo que demora para rodar a relaxação linear e a heurística.
     5.3 - Indicar o gap das soluções heurísticas em relação às soluções ótimas.
-
-Acho que a ideia é entregar um zip com os códigos feitos e o relatório.
-
-Eu já fiz a 1, então acho que é uma boa eu ficar com a 3.
-Aí eu pensei na separação:
-Pessoa 1: item 2 e 4
-Pessoa 2: item 5 e 4
-Pelo que o @viniciusborges  tinha me falado uma vez, ele tinha interesse em ficar com o 5, mas vejam aí. O que vcs acham?
