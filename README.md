@@ -14,5 +14,20 @@ In the folder [results](results), there are the results of execution.
 
 For more information about the model, solving process and results, checkout the [report](relatorioProgmat.pdf).
 
+## Usage
+
+To run this project you need to use Python 3.
+To see the heuristics working, run:
+```
+    python heuristics.py burma14
+```
+Where burma14 is the name of the file that's in the folder 'data' without the extension '.tsp'.
+
+To see the linear solver solving the problem using integral variables, run:
+```
+    python3 solve.py
+```
+It will solve also the burma14 problem.
+
 ## Tech stack
 * Python (Pulp)
